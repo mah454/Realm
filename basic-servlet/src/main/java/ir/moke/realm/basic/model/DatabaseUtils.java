@@ -1,35 +1,75 @@
 package ir.moke.realm.basic.model;
 
+import javax.annotation.Resource;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * @author Mahdi Sheikh Hosseini (mah454)
+ * DataBase Connection types :
+ * 1) JDBC
+ * 2) JNDI
+ * 3) JNDI Annotation type
+ */
 public class DatabaseUtils {
-    public Connection connection;
-    public PreparedStatement preparedStatement;
 
-    /*static {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+    protected Connection connection;
+    protected PreparedStatement preparedStatement;
 
-    public DatabaseUtils() {
+    /**
+     * Annotation base datasource connection .
+     * @see DataSource
+     * @see Resource
+     * This method need dependency injection for get database connection .
+     * Usage Solution :
+     * 1) Use Spring IOC
+     * 2) Use CDI
+     * 3) Use EJB
+     * @see @Injection
+     * */
+    /*@Resource(name = "jdbc/realm")
+    private DataSource dataSource;
+    protected DatabaseUtils() {
         try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://mysql-database/realm", "root", "rootpass");
+            dataSource.getConnection() ;
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }*/
 
-    public DatabaseUtils() {
+    /**
+     * Classic Database Conenction (JDBC)
+     * @see java.sql.DriverManager
+     */
+
+    /*protected DatabaseUtils() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            this.connection = DriverManager.getConnection("jdbc:mysql://mysql-database/realm", "root", "rootpass");
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+
+    /**
+     * Datasource Connection with lookup context .
+     * @see javax.naming.Context
+     * @see javax.sql.DataSource
+     */
+    protected DatabaseUtils() {
         try {
             Context context = new InitialContext();
             DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/realm");
