@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Context>
+    <Resource name="jdbc/realm"
+              auth="Container"
+              type="javax.sql.DataSource"
+              username="root"
+              password="rootpass"
+              driverClassName="com.mysql.cj.jdbc.Driver"
+              url="jdbc:mysql://mysql-database:3306/realm"
+              maxActive="8"
+              maxIdle="4"/>
+
+    <Realm className="org.apache.catalina.realm.DataSourceRealm"
+           dataSourceName="jdbc/realm"
+           userTable="users"
+           userNameCol="username"
+           userCredCol="password"
+           userRoleTable="roles"
+           roleNameCol="role_name"/>
+</Context>
