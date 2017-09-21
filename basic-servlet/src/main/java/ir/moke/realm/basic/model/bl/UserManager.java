@@ -28,18 +28,25 @@ public class UserManager implements GenericBL<User> {
     }
 
     @Override
-    public User show(long id) {
+    public List<User> find() {
+        UserDao userDao = new UserDao();
+        List<User> list = userDao.select();
+        userDao.close();
+        return list;
+    }
+
+    @Override
+    public User find(long id) {
         UserDao userDao = new UserDao();
         User user = userDao.select(id);
         userDao.close();
         return user;
     }
 
-    @Override
-    public List<User> showAll() {
+    public User find(String username) {
         UserDao userDao = new UserDao();
-        List<User> list = userDao.select();
+        User user = userDao.select(username);
         userDao.close();
-        return list;
+        return user;
     }
 }

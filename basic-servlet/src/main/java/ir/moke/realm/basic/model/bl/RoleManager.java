@@ -5,7 +5,7 @@ import ir.moke.realm.basic.model.to.Role;
 
 import java.util.List;
 
-public class RoleManager implements GenericBL<Role>{
+public class RoleManager implements GenericBL<Role> {
     @Override
     public void register(Role role) {
         RoleDao roleDao = new RoleDao();
@@ -28,18 +28,25 @@ public class RoleManager implements GenericBL<Role>{
     }
 
     @Override
-    public Role show(long id) {
+    public List<Role> find() {
+        RoleDao roleDao = new RoleDao();
+        List<Role> list = roleDao.select();
+        roleDao.close();
+        return list;
+    }
+
+    @Override
+    public Role find(long id) {
         RoleDao roleDao = new RoleDao();
         Role role = roleDao.select(id);
         roleDao.close();
         return role;
     }
 
-    @Override
-    public List<Role> showAll() {
+    public Role find(String username) {
         RoleDao roleDao = new RoleDao();
-        List<Role> list = roleDao.select();
+        Role role = roleDao.select(username);
         roleDao.close();
-        return list;
+        return role;
     }
 }

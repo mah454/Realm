@@ -9,7 +9,7 @@ public interface GenericBL<T> {
 
     void remove(long id);
 
-    T show(long id);
+    List<T> find();
 
-    List<T> showAll();
+    T find(long id);
 }
