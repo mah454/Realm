@@ -59,6 +59,22 @@ public class RoleDao extends DatabaseUtils implements GenericDao<Role> {
     }
 
     @Override
+    public List<Role> select() {
+        List<Role> list = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM roles";
+            preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                list.add(unmarshaller(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    @Override
     public Role select(long id) {
         Role role = new Role();
         try {
@@ -75,20 +91,20 @@ public class RoleDao extends DatabaseUtils implements GenericDao<Role> {
         return role;
     }
 
-    @Override
-    public List<Role> select() {
-        List<Role> list = new ArrayList<>();
+    public Role select(String username) {
+        Role role = new Role();
         try {
-            String sql = "SELECT * FROM roles";
+            String sql = "SELECT * FROM roles WHERE username=?";
             preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                list.add(unmarshaller(resultSet));
+            if (resultSet.next()) {
+                role = unmarshaller(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        return role;
     }
 
     private static Role unmarshaller(ResultSet resultSet) {
