@@ -2,6 +2,8 @@ package ir.moke.realm.basic.model.dao;
 
 import ir.moke.realm.basic.model.DatabaseUtils;
 import ir.moke.realm.basic.model.to.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,13 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao extends DatabaseUtils implements GenericDao<User> {
+    private static final Logger logger = LoggerFactory.getLogger(UserDao.class);
+
     public UserDao() {
         try {
-            String sql = "CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,username VARCHAR(20),password VARCHAR(20));";
+            String sql = "CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,username VARCHAR(20) UNIQUE,password VARCHAR(20));";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         }
     }
 
@@ -28,7 +32,7 @@ public class UserDao extends DatabaseUtils implements GenericDao<User> {
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         }
     }
 
@@ -42,7 +46,7 @@ public class UserDao extends DatabaseUtils implements GenericDao<User> {
             preparedStatement.setLong(3, user.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         }
     }
 
@@ -54,7 +58,7 @@ public class UserDao extends DatabaseUtils implements GenericDao<User> {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         }
     }
 
@@ -69,7 +73,7 @@ public class UserDao extends DatabaseUtils implements GenericDao<User> {
                 list.add(unmarshaller(resultSet));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         }
         return list;
     }
@@ -84,9 +88,11 @@ public class UserDao extends DatabaseUtils implements GenericDao<User> {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 user = unmarshaller(resultSet);
+            } else {
+                return null;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         }
         return user;
     }
@@ -100,9 +106,11 @@ public class UserDao extends DatabaseUtils implements GenericDao<User> {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 user = unmarshaller(resultSet);
+            } else {
+                return null;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         }
         return user;
     }
@@ -114,7 +122,7 @@ public class UserDao extends DatabaseUtils implements GenericDao<User> {
             user.setUsername(resultSet.getString("username"));
             user.setPassword(resultSet.getString("password"));
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage());
         }
         return user;
     }
