@@ -50,7 +50,7 @@ public class DatabaseUtils {
     /*protected DatabaseUtils() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            this.connection = DriverManager.getConnection("jdbc:mysql://mysql-database/realm", "root", "rootpass");
+            this.connection = DriverManager.getConnection("jdbc:mysql://mysql-database/realm?useSSL=false", "root", "rootpass");
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
