@@ -12,6 +12,7 @@
               url="jdbc:mysql://mysql-database:3306/realm"/>
 
     <Realm className="org.apache.catalina.realm.DataSourceRealm"
+           localDataSource="true"
            dataSourceName="jdbc/realm"
            userTable="users"
            userNameCol="username"
