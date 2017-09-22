@@ -19,16 +19,11 @@ public class ServerInitializer implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        if (adminUserExist()) {
-            logger.debug("Create Admin User");
+        if (!adminExist()) {
+            logger.debug("Create admin (superuser) account");
             userManager.register(new User("admin", "111111"));
+            roleManager.register(new Role("admin", "superuser"));
         }
-
-        if (adminRoleExist()) {
-            logger.debug("Create Admin Role");
-            roleManager.register(new Role("admin", "admin"));
-        }
-
     }
 
     @Override
@@ -36,15 +31,11 @@ public class ServerInitializer implements ServletContextListener {
 
     }
 
-    private boolean adminUserExist() {
+    private boolean adminExist() {
         userManager = new UserManager();
-        User user = userManager.find("admin");
-        return user != null;
-    }
-
-    private boolean adminRoleExist() {
         roleManager = new RoleManager();
+        User user = userManager.find("admin");
         Role role = roleManager.find("admin");
-        return role != null;
+        return user != null && role != null;
     }
 }
